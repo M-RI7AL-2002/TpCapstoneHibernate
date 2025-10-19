@@ -24,17 +24,30 @@ public class Reservation {
     @Column(length = 500)
     private String motif;
 
-    // Relation ManyToOne avec Utilisateur
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "utilisateur_id", nullable = false)
     private Utilisateur utilisateur;
 
-    // Relation ManyToOne avec Salle
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "salle_id", nullable = false)
     private Salle salle;
 
-    // Constructeur par défaut requis par JPA
+    @Enumerated(EnumType.STRING)
+    @Column(name = "statut")
+    private StatutReservation statut = StatutReservation.CONFIRMEE;
+
+
+    @Version
+    private Long version;
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
     public Reservation() {
     }
 
@@ -44,7 +57,6 @@ public class Reservation {
         this.motif = motif;
     }
 
-    // Getters et Setters
     public Long getId() {
         return id;
     }
@@ -93,13 +105,11 @@ public class Reservation {
         this.salle = salle;
     }
 
-    @Override
-    public String toString() {
-        return "Reservation{" +
-                "id=" + id +
-                ", dateDebut=" + dateDebut +
-                ", dateFin=" + dateFin +
-                ", motif='" + motif + '\'' +
-                '}';
+    public StatutReservation getStatut() {
+        return statut;
+    }
+
+    public void setStatut(StatutReservation statut) {
+        this.statut = statut;
     }
 }

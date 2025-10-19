@@ -12,48 +12,47 @@ import java.util.List;
 public class Utilisateur {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @NotBlank (message = "le nom est obligatoire")
-    @Column(length = 50, nullable = false)
+    private Long id;
+
+    @NotBlank(message = "Le nom est obligatoire")
+    @Column(nullable = false)
     private String nom;
-    @NotBlank (message = "le prenom est obligatoire")
-    @Column(length = 50, nullable = false)
+
+    @NotBlank(message = "Le prénom est obligatoire")
+    @Column(nullable = false)
     private String prenom;
 
-    @NotBlank(message = "Email est obligatoire")
-    @Email(message = "format email invalid")
+    @NotBlank(message = "L'email est obligatoire")
+    @Email(message = "Format d'email invalide")
     @Column(unique = true, nullable = false)
     private String email;
 
-    // Relation OneToMany avec Réservation
+    @Column(name = "telephone")
+    private String telephone;
+    @Column(name = "departement")
+    private String departement;
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations = new ArrayList<>();
 
-    public Utilisateur() {
 
+    @Version
+    private Long version;
+
+    public Utilisateur() {
     }
 
     public Utilisateur(String nom, String prenom, String email) {
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
+
     }
 
-    public void addReservation(Reservation reservation) {
-        reservations.add(reservation);
-        reservation.setUtilisateur(this);
-    }
-
-    public void removeReservation(Reservation reservation) {
-        reservations.remove(reservation);
-        reservation.setUtilisateur(null);
-    }
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -89,15 +88,33 @@ public class Utilisateur {
         this.reservations = reservations;
     }
 
-    @Override
-    public String toString() {
-        return "Utilisateur{" +
-                "id=" + id +
-                ", nom='" + nom + '\'' +
-                ", prenom='" + prenom + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+    public String getTelephone() {
+        return telephone;
     }
 
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
 
+    public String getDepartement() {
+        return departement;
+    }
+
+    public void setDepartement(String departement) {
+        this.departement = departement;
+    }
+
+    public void addReservation(Reservation reservation) {
+    this.reservations.add(reservation);
+    reservation.setUtilisateur(this);
+
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
 }

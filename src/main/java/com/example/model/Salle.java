@@ -28,11 +28,19 @@ public class Salle {
     @Column(length = 500)
     private String description;
 
-    // Relation OneToMany avec Réservation
+    @Column(name = "batiment")
+    private String batiment;
+
+    @Column(name = "etage")
+    private Integer etage;
+
+
+    @Column(name = "numero")
+    private String numero;
+
     @OneToMany(mappedBy = "salle", cascade = CascadeType.ALL)
     private List<Reservation> reservations = new ArrayList<>();
 
-    // Relation ManyToMany avec Équipement
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "salle_equipement",
@@ -41,7 +49,18 @@ public class Salle {
     )
     private Set<Equipement> equipements = new HashSet<>();
 
-    // Constructeur par défaut requis par JPA
+
+    @Version
+    private Long version;
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
     public Salle() {
     }
 
@@ -50,29 +69,14 @@ public class Salle {
         this.capacite = capacite;
     }
 
-    // Méthodes utilitaires pour gérer la relation bidirectionnelle avec Réservation
-    public void addReservation(Reservation reservation) {
-        reservations.add(reservation);
-        reservation.setSalle(this);
+    public Salle(String nom, Integer capacite, String description, String batiment, Integer etage) {
+        this.nom = nom;
+        this.capacite = capacite;
+        this.description = description;
+        this.batiment = batiment;
+        this.etage = etage;
     }
 
-    public void removeReservation(Reservation reservation) {
-        reservations.remove(reservation);
-        reservation.setSalle(null);
-    }
-
-    // Méthodes utilitaires pour gérer la relation ManyToMany avec Équipement
-    public void addEquipement(Equipement equipement) {
-        equipements.add(equipement);
-        equipement.getSalles().add(this);
-    }
-
-    public void removeEquipement(Equipement equipement) {
-        equipements.remove(equipement);
-        equipement.getSalles().remove(this);
-    }
-
-    // Getters et Setters
     public Long getId() {
         return id;
     }
@@ -105,6 +109,22 @@ public class Salle {
         this.description = description;
     }
 
+    public String getBatiment() {
+        return batiment;
+    }
+
+    public void setBatiment(String batiment) {
+        this.batiment = batiment;
+    }
+
+    public Integer getEtage() {
+        return etage;
+    }
+
+    public void setEtage(Integer etage) {
+        this.etage = etage;
+    }
+
     public List<Reservation> getReservations() {
         return reservations;
     }
@@ -121,13 +141,21 @@ public class Salle {
         this.equipements = equipements;
     }
 
-    @Override
-    public String toString() {
-        return "Salle{" +
-                "id=" + id +
-                ", nom='" + nom + '\'' +
-                ", capacite=" + capacite +
-                ", description='" + description + '\'' +
-                '}';
+    public void addEquipement(Equipement e) {
+        this.equipements.add(e);
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    public void addReservation(Reservation reservation) {
+        this.reservations.add(reservation);
+        reservation.setSalle(this);
+
     }
 }

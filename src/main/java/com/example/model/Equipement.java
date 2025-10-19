@@ -25,6 +25,23 @@ public class Equipement {
     @ManyToMany(mappedBy = "equipements")
     private Set<Salle> salles = new HashSet<>();
 
+    @Column(name = "reference")
+    private String reference;
+
+    @Column(name = "departement")
+    private String departement;
+
+    @Version
+    private Long version;
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
     // Constructeur par défaut requis par JPA
     public Equipement() {
     }
@@ -41,6 +58,14 @@ public class Equipement {
     // Getters et Setters
     public Long getId() {
         return id;
+    }
+
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
     }
 
     public void setId(Long id) {
@@ -69,6 +94,14 @@ public class Equipement {
 
     public void setSalles(Set<Salle> salles) {
         this.salles = salles;
+    }
+
+    public String getDepartement() {
+        return departement;
+    }
+
+    public void setDepartement(String departement) {
+        this.departement = departement;
     }
 
     @Override
